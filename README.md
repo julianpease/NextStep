@@ -1,6 +1,6 @@
-# Nuxt Minimal Starter
+# Next Step
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A simple app to help our fellow Derivkins with their transition
 
 ## Setup
 
