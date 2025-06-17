@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
     // Replace with your Google Sheet ID
     const spreadsheetId = process.env.GOOGLE_SHEET_ID
-    const range = 'Sheet1!A2:E' // Adjust range based on your sheet
+    const range = 'Sheet1!A2:F' // Include column F (Opt-In)
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
@@ -24,14 +24,16 @@ export default defineEventHandler(async (event) => {
 
     const rows = response.data.values || []
 
-    // Transform the data into our required format
-    const people = rows.map(row => ({
-      name: row[0] || '',
-      jobProfile: row[1] || '',
-      jobFamily: row[2] || '',
-      location: row[3] || '',
-      linkedin: row[4] || '',
-    }))
+    // Only include rows where Opt-In (column F) is 'Yes'
+    const people = rows
+      .filter(row => (row[5] || '').toLowerCase() === 'yes')
+      .map(row => ({
+        name: row[0] || '',
+        jobProfile: row[1] || '',
+        jobFamily: row[2] || '',
+        location: row[3] || '',
+        linkedin: row[4] || '',
+      }))
 
     return { people }
   } catch (error) {
@@ -41,4 +43,4 @@ export default defineEventHandler(async (event) => {
       message: 'Failed to fetch data from Google Sheets',
     })
   }
-}) 
+})

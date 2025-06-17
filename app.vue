@@ -78,39 +78,21 @@
 </template>
 
 <script setup>
-const showListings = ref(false)
+import { ref, computed, onMounted } from 'vue'
 
-// Sample data - In a real application, this would come from an API
-const people = ref([
-  {
-    name: 'John Doe',
-    jobProfile: 'Senior Software Engineer',
-    jobFamily: 'Engineering',
-    location: 'Cape Town',
-    linkedin: 'https://linkedin.com/in/johndoe'
-  },
-  {
-    name: 'Jane Smith',
-    jobProfile: 'Product Manager',
-    jobFamily: 'Product',
-    location: 'Durban',
-    linkedin: 'https://linkedin.com/in/janesmith'
-  },
-  {
-    name: 'Mike Johnson',
-    jobProfile: 'UX Designer',
-    jobFamily: 'Design',
-    location: 'Pretoria',
-    linkedin: 'https://linkedin.com/in/mikejohnson'
-  },
-  {
-    name: 'Michelle Jackson',
-    jobProfile: 'UX Designer',
-    jobFamily: 'Design',
-    location: 'Isle of Man',
-    linkedin: 'https://linkedin.com/in/mikejohnson'
+const showListings = ref(false)
+const people = ref([])
+
+// Fetch data from the API on mount
+onMounted(async () => {
+  try {
+    const res = await fetch('/api/sheets')
+    const data = await res.json()
+    people.value = data.people || []
+  } catch (e) {
+    console.error('Failed to fetch people:', e)
   }
-])
+})
 
 // Filters
 const filters = ref({
